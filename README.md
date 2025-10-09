@@ -55,7 +55,7 @@
 ![скриншот задания](images\lab02\arrays\flatten\arrays_flatten4.png)
 ### min_max
 ![скриншот задания](images\lab02\arrays\min_max\arrays_min_max1.png)
-ede
+## frvt
 ![скриншот задания](images\lab02\arrays\min_max\arrays_min_max2.png)
 ![скриншот задания](images\lab02\arrays\min_max\arrays_min_max3.png)
 ![скриншот задания](images\lab02\arrays\min_max\arrays_min_max4.png)

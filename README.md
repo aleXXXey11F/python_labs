@@ -50,20 +50,20 @@
         print(f"Ошибка: {a}") #flatten output
 ### flatten
 ![скриншот задания](images/lab02/arrays/flatten/arrays_flatten1.png)
-![скриншот задания](images\lab02\arrays\flatten\arrays_flatten2.png)
-![скриншот задания](images\lab02\arrays\flatten\arrays_flatten3.png)
-![скриншот задания](images\lab02\arrays\flatten\arrays_flatten4.png)
+![скриншот задания](images/lab02/arrays/flatten/arrays_flatten2.png)
+![скриншот задания](images/lab02/arrays/flatten/arrays_flatten3.png)
+![скриншот задания](images/lab02/arrays/flatten/arrays_flatten4.png)
 ### min_max
-![скриншот задания](images\lab02\arrays\min_max\arrays_min_max1.png)
-![скриншот задания](images\lab02\arrays\min_max\arrays_min_max2.png)
-![скриншот задания](images\lab02\arrays\min_max\arrays_min_max3.png)
-![скриншот задания](images\lab02\arrays\min_max\arrays_min_max4.png)
-![скриншот задания](images\lab02\arrays\min_max\arrays_min_max5.png)
+![скриншот задания](images/lab02/arrays/min_max/arrays_min_max1.png)
+![скриншот задания](images/lab02/arrays/min_max/arrays_min_max2.png)
+![скриншот задания](images/lab02/arrays/min_max/arrays_min_max3.png)
+![скриншот задания](images/lab02/arrays/min_max/arrays_min_max4.png)
+![скриншот задания](images/lab02/arrays/min_max/arrays_min_max5.png)
 ### unique_sorted
-![скриншот задания](images\lab02\arrays\unique_sorted\arrays_unique_sorted1.png)
-![скриншот задания](images\lab02\arrays\unique_sorted\arrays_unique_sorted2.png)
-![скриншот задания](images\lab02\arrays\unique_sorted\arrays_unique_sorted3.png)
-![скриншот задания](images\lab02\arrays\unique_sorted\arrays_unique_sorted4.png)
+![скриншот задания](images/lab02/arrays/unique_sorted/arrays_unique_sorted1.png)
+![скриншот задания](images/lab02/arrays/unique_sorted/arrays_unique_sorted2.png)
+![скриншот задания](images/lab02/arrays/unique_sorted/arrays_unique_sorted3.png)
+![скриншот задания](images/lab02/arrays/unique_sorted/arrays_unique_sorted4.png)
 ## Задание 2 - Matrix
     m=[[1, 2], [3]]
     
@@ -112,22 +112,22 @@
     except ValueError as b:
         print(f"Ошибка: {b}") #col_sums output
 ### transpose
-![скриншот задания](\images\lab02\matrix\transpose\matrix_transpose1.png)
-![скриншот задания](images\lab02\matrix\transpose\matrix_transpose2.png)
-![скриншот задания](images\lab02\matrix\transpose\matrix_transpose3.png)
-![скриншот задания](images\lab02\matrix\transpose\matrix_transpose4.png)
-![скриншот задания](images\lab02\matrix\transpose\matrix_transpose5.png)
+![скриншот задания](images/lab02/matrix/transpose/matrix_transpose1.png)
+![скриншот задания](images/lab02/matrix/transpose/matrix_transpose2.png)
+![скриншот задания](images/lab02/matrix/transpose/matrix_transpose3.png)
+![скриншот задания](images/lab02/matrix/transpose/matrix_transpose4.png)
+![скриншот задания](images/lab02/matrix/transpose/matrix_transpose5.png)
 ### row_sums
-![скриншот задания](images\lab02\matrix\row_sums\matrix_row_sums1.png)
-![скриншот задания](images\lab02\matrix\row_sums\matrix_row_sums2.png)
-![скриншот задания](images\lab02\matrix\row_sums\matrix_row_sums3.png)
-![скриншот задания](images\lab02\matrix\row_sums\matrix_row_sums4.png)
-![скриншот задания](images\lab02\matrix\row_sums\matrix_row_sums5.png)
+![скриншот задания](images/lab02/matrix/row_sums/matrix_row_sums1.png)
+![скриншот задания](images/lab02/matrix/row_sums/matrix_row_sums2.png)
+![скриншот задания](images/lab02/matrix/row_sums/matrix_row_sums3.png)
+![скриншот задания](images/lab02/matrix/row_sums/matrix_row_sums4.png)
+![скриншот задания](images/lab02/matrix/row_sums/matrix_row_sums5.png)
 ### col_sums
-![скриншот задания](images\lab02\matrix\col_sums\matrix_col_sums1.png)
-![скриншот задания](images\lab02\matrix\col_sums\matrix_col_sums2.png)
-![скриншот задания](images\lab02\matrix\col_sums\matrix_col_sums3.png)
-![скриншот задания](images\lab02\matrix\col_sums\matrix_col_sums4.png)
+![скриншот задания](images/lab02/matrix/col_sums/matrix_col_sums1.png)
+![скриншот задания](images/lab02/matrix/col_sums/matrix_col_sums2.png)
+![скриншот задания](images/lab02/matrix/col_sums/matrix_col_sums3.png)
+![скриншот задания](images/lab02/matrix/col_sums/matrix_col_sums4.png)
 ## Задание 3 - Tuples
     def format_record(rec: tuple[str, str, float]) -> str:
         if not isinstance(rec[0], str) or not isinstance(rec[1], str) or not isinstance(rec[2], (int, float)):
@@ -184,4 +184,4 @@
             print(f"{i}. {result}")
         except (ValueError, TypeError) as e:
             print(f"{i}. Ошибка: {e}")
-![скриншот задания](images\lab02\tuples\tuples.png)
+![скриншот задания](images/lab02/tuples/tuples.png)

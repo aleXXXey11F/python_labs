@@ -139,8 +139,6 @@
 ![скриншот задания](images/lab02/matrix/row_sums/matrix_row_sums3.png)
 
 ![скриншот задания](images/lab02/matrix/row_sums/matrix_row_sums4.png)
-
-![скриншот задания](images/lab02/matrix/row_sums/matrix_row_sums5.png)
 ### col_sums
 ![скриншот задания](images/lab02/matrix/col_sums/matrix_col_sums1.png)
 

@@ -48,7 +48,7 @@
         print(flatten(nums))
     except TypeError as a:
         print(f"Ошибка: {a}") #flatten output
-### flatten
+## flatten
 ![скриншот задания](images\lab02\arrays\flatten\arrays_flatten1.png)
 ![скриншот задания](images\lab02\arrays\flatten\arrays_flatten2.png)
 ![скриншот задания](images\lab02\arrays\flatten\arrays_flatten3.png)

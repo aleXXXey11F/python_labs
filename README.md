@@ -112,7 +112,7 @@ try:
 except ValueError as b:
     print(f"Ошибка: {b}") #col_sums output
 ### transpose
-![скриншот задания](images\lab02\matrix\transpose\matrix_transpose1.png)
+![скриншот задания](\images\lab02\matrix\transpose\matrix_transpose1.png)
 ![скриншот задания](images\lab02\matrix\transpose\matrix_transpose2.png)
 ![скриншот задания](images\lab02\matrix\transpose\matrix_transpose3.png)
 ![скриншот задания](images\lab02\matrix\transpose\matrix_transpose4.png)

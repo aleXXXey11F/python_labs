@@ -49,7 +49,7 @@ try:
 except TypeError as a:
     print(f"Ошибка: {a}") #flatten output
 ### flatten
-![скриншот задания 23](images\lab02\arrays\flatten\arrays_flatten1.png)
+![скриншот задания]("C:\Users\sanek\gits\python_labs\images\lab02\arrays\flatten\arrays_flatten1.png")
 ![скриншот задания](images\lab02\arrays\flatten\arrays_flatten2.png)
 ![скриншот задания](images\lab02\arrays\flatten\arrays_flatten3.png)
 ![скриншот задания](images\lab02\arrays\flatten\arrays_flatten4.png)

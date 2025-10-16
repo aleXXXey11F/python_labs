@@ -148,59 +148,184 @@
 
 ![скриншот задания](images/lab02/matrix/col_sums/matrix_col_sums4.png)
 ## Задание 3 - Tuples
-    def format_record(rec: tuple[str, str, float]) -> str:
-        if not isinstance(rec[0], str) or not isinstance(rec[1], str) or not isinstance(rec[2], (int, float)):
-            raise TypeError("Неверные типы данных в записи")
+        def format_record(rec: tuple[str, str, float]) -> str:
+            if not isinstance(rec[0], str) or not isinstance(rec[1], str) or not isinstance(rec[2], (int, float)):
+                raise TypeError("Неверные типы данных в записи")
+            
+            fio, group, gpa = rec
+            
+            if not fio.strip():
+                raise ValueError("ФИО не может быть пустым")
+            if not group.strip():
+                raise ValueError("Группа не может быть пустой")
+            if gpa < 0:
+                raise ValueError("GPA не может быть отрицательным")
+            
+            fio_parts = ' '.join(fio.split()).title().split()
+            
+            initials = []
+            for part in fio_parts[1:]:  
+                if part:  
+                    initials.append(part[0].upper() + '.')
+            
+            formatted_fio = f"{fio_parts[0]} {' '.join(initials)}"
+            
+            formatted_gpa = f"{gpa:.2f}"
+            
+            return f"{formatted_fio}, гр. {group.strip()}, GPA {formatted_gpa}"
         
-        fio, group, gpa = rec
+        test_cases = [
+            ("Иванов Иван Иванович", "BIVT-25", 4.6),
+            ("Петров Пётр", "IKBO-12", 5.0),
+            ("Петров Пётр Петрович", "IKBO-12", 5.0),
+            ("  сидорова  анна   сергеевна ", "ABB-01", 3.999),
+        ]
         
-        if not fio.strip():
-            raise ValueError("ФИО не может быть пустым")
-        if not group.strip():
-            raise ValueError("Группа не может быть пустой")
-        if gpa < 0:
-            raise ValueError("GPA не может быть отрицательным")
+        print("Тест-кейсы:")
+        for i, test_case in enumerate(test_cases, 1):
+            try:
+                result = format_record(test_case)
+                print(f"{i}. {result}")
+            except (ValueError, TypeError) as e:
+                print(f"{i}. Ошибка: {e}")
         
-        fio_parts = ' '.join(fio.split()).title().split()
+        print("\nНекорректные записи:")
+        invalid_cases = [
+            ("", "BIVT-25", 4.6),  
+            ("Иванов Иван", "", 4.6),  
+            ("Иванов Иван", "BIVT-25", -1.0),  
+            ("Иванов Иван", "BIVT-25", "4.6"),  
+        ]
         
-        initials = []
-        for part in fio_parts[1:]:  
-            if part:  
-                initials.append(part[0].upper() + '.')
-        
-        formatted_fio = f"{fio_parts[0]} {' '.join(initials)}"
-        
-        formatted_gpa = f"{gpa:.2f}"
-        
-        return f"{formatted_fio}, гр. {group.strip()}, GPA {formatted_gpa}"
+        for i, test_case in enumerate(invalid_cases, 1):
+            try:
+                result = format_record(test_case)
+                print(f"{i}. {result}")
+            except (ValueError, TypeError) as e:
+                print(f"{i}. Ошибка: {e}")
+    ![скриншот задания](images/lab02/tuples/tuples.png)
+# Лабораторная работа 3
+## Задание A
+    import re
+    from typing import Dict, List, Tuple
     
-    test_cases = [
-        ("Иванов Иван Иванович", "BIVT-25", 4.6),
-        ("Петров Пётр", "IKBO-12", 5.0),
-        ("Петров Пётр Петрович", "IKBO-12", 5.0),
-        ("  сидорова  анна   сергеевна ", "ABB-01", 3.999),
-    ]
     
-    print("Тест-кейсы:")
-    for i, test_case in enumerate(test_cases, 1):
-        try:
-            result = format_record(test_case)
-            print(f"{i}. {result}")
-        except (ValueError, TypeError) as e:
-            print(f"{i}. Ошибка: {e}")
+    def normalize(text: str, *, casefold: bool = True, yo2e: bool = True) -> str:
+        if not text:
+            return ""
+        result = text
+        if yo2e:
+            result = result.replace('ё', 'е').replace('Ё', 'Е')
+        if casefold:
+            result = result.casefold()
+        control_chars = ['\t', '\r', '\n']
+        for char in control_chars:
+            result = result.replace(char, ' ')
+        result = re.sub(r'\s+', ' ', result).strip()
     
-    print("\nНекорректные записи:")
-    invalid_cases = [
-        ("", "BIVT-25", 4.6),  
-        ("Иванов Иван", "", 4.6),  
-        ("Иванов Иван", "BIVT-25", -1.0),  
-        ("Иванов Иван", "BIVT-25", "4.6"),  
-    ]
+        return result
     
-    for i, test_case in enumerate(invalid_cases, 1):
-        try:
-            result = format_record(test_case)
-            print(f"{i}. {result}")
-        except (ValueError, TypeError) as e:
-            print(f"{i}. Ошибка: {e}")
-![скриншот задания](images/lab02/tuples/tuples.png)
+    
+    def tokenize(text: str) -> List[str]:
+        if not text:
+            return []
+        pattern = r'\w+(?:-\w+)*'
+        tokens = re.findall(pattern, text)
+        return tokens
+    
+    def count_freq(tokens: List[str]) -> Dict[str, int]:
+        freq_dict = {}
+        for token in tokens:
+            freq_dict[token] = freq_dict.get(token, 0) + 1
+        
+        return freq_dict
+    
+    
+    def top_n(freq: Dict[str, int], n: int = 5) -> List[Tuple[str, int]]:
+        if not freq:
+            return []
+        items = list(freq.items())
+        sorted_items = sorted(items, key=lambda x: (-x[1], x[0]))
+        return sorted_items[:n]
+    """
+    # Тесты для normalize
+    print("=== normalize ===")
+    print(repr(normalize("ПрИвЕт\nМИр\t")))  
+    print(repr(normalize("ёжик, Ёлка", yo2e=True)))  
+    print(repr(normalize("Hello\r\nWorld")))  
+    print(repr(normalize("  двойные   пробелы  ")))  
+    
+    # Тесты для tokenize
+    print("\n=== tokenize ===")
+    print(tokenize("привет мир"))  
+    print(tokenize("hello,world!!!"))  
+    print(tokenize("по-настоящему круто"))  
+    print(tokenize("2025 год"))  
+    print(tokenize("emoji 😀 не слово"))  
+    
+    # Тесты для count_freq + top_n
+    print("\n=== count_freq + top_n ===")
+    tokens1 = ["a", "b", "a", "c", "b", "a"]
+    freq1 = count_freq(tokens1)
+    print(freq1)  
+    print(top_n(freq1, 2))  
+    
+    tokens2 = ["bb", "aa", "bb", "aa", "cc"]
+    freq2 = count_freq(tokens2)
+    print(freq2)  
+    print(top_n(freq2, 2))  
+    """
+    
+    
+    """
+    # ТЕСТЫ ДЛЯ ЗАДАНИЯ A
+    if __name__ == "__main__":
+        # normalize
+        assert normalize("ПрИвЕт\nМИр\t") == "привет мир"
+        assert normalize("ёжик, Ёлка") == "ежик, елка"
+        
+        # tokenize
+        assert tokenize("привет, мир!") == ["привет", "мир"]
+        assert tokenize("по-настоящему круто") == ["по-настоящему", "круто"]
+        assert tokenize("2025 год") == ["2025", "год"]
+        
+        # count_freq + top_n
+        freq = count_freq(["a","b","a","c","b","a"])
+        assert freq == {"a":3, "b":2, "c":1}
+        assert top_n(freq, 2) == [("a",3), ("b",2)]
+        
+        # тай-брейк по слову при равной частоте
+        freq2 = count_freq(["bb","aa","bb","aa","cc"])
+        assert top_n(freq2, 2) == [("aa",2), ("bb",2)]
+        
+        print("✅ Все тесты прошли успешно!")
+        """
+![скриншот задания](images/lab03/text/text.png)
+![скриншот задания](images/lab03/text/text2.png)
+## Задание В
+    #!/usr/bin/env python3
+    import sys
+    import os
+    sys.path.insert(0, os.path.dirname(__file__))
+    from lib.text import normalize, tokenize, count_freq, top_n
+    
+    text = sys.stdin.read().strip()
+    if not text: 
+        print("No input")
+        sys.exit()
+    
+    normalized = normalize(text)
+    tokens = tokenize(normalized)
+    freq = count_freq(tokens)
+    top_words = top_n(freq, 5)
+    
+    print(f"Всего слов: {len(tokens)}")
+    print(f"Уникальных слов: {len(freq)}")
+    print("Топ-5:")
+    for word, count in top_words:
+        print(f"{word}:{count}")
+![скриншот задания](images/lab03/text_stats/text_stats1.png)
+![скриншот задания](images/lab03/text_stats/text_stats2.png)
+![скриншот задания](images/lab03/text_stats/text_stats3.png)
+![скриншот задания](images/lab03/text_stats/text_stats4.png)
+![скриншот задания](images/lab03/text_stats/text_stats5.png)

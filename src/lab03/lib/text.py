@@ -39,7 +39,7 @@ def top_n(freq: Dict[str, int], n: int = 5) -> List[Tuple[str, int]]:
     items = list(freq.items())
     sorted_items = sorted(items, key=lambda x: (-x[1], x[0]))
     return sorted_items[:n]
-
+"""
 # Тесты для normalize
 print("=== normalize ===")
 print(repr(normalize("ПрИвЕт\nМИр\t")))  
@@ -66,3 +66,4 @@ tokens2 = ["bb", "aa", "bb", "aa", "cc"]
 freq2 = count_freq(tokens2)
 print(freq2)  
 print(top_n(freq2, 2))  
+"""

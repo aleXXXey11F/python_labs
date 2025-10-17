@@ -329,3 +329,9 @@
 ![скриншот задания](images/lab03/text_stats/text_stats3.png)
 ![скриншот задания](images/lab03/text_stats/text_stats4.png)
 ![скриншот задания](images/lab03/text_stats/text_stats5.png)
+### Тестовые для 2 задания в баш
+    echo "Hello world Hello" | python src/lab03/text_stats.py
+    echo "state-of-the-art design user-friendly interface" | python src/lab03/text_stats.py
+    echo "2024 year 2025 year 2024" | python src/lab03/text_stats.py
+    echo "bb aa bb aa cc" | python src/lab03/text_stats.py
+    echo "Hello, world!!! Test-test... 123" | python src/lab03/text_stats.py

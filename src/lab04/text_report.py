@@ -2,15 +2,16 @@ import sys
 import os
 from pathlib import Path
 
-# Добавляем путь к корню проекта
+# Добавляем путь к папке lib
 project_root = Path(__file__).parent.parent.parent.parent
-sys.path.insert(0, str(project_root))
+lib_path = project_root / "lib"
+sys.path.insert(0, str(lib_path))
 
 try:
-    from src.text import tokenize, count_freg, top_n, normalize
+    from lib.text import tokenize, count_freg, top_n, normalize
 except ImportError as e:
     print(f"Ошибка импорта: {e}")
-    print("Убедитесь, что файл src/text.py существует")
+    print("Убедитесь, что файл lib/text.py существует")
     sys.exit(1)
 
 import csv
@@ -35,8 +36,9 @@ def print_table(top: list[tuple]):
 
 
 def main():
-    input_path = Path('data/input.txt')     
-    output_path = Path("data/report.csv")   
+    # Ищем файл в корневой папке data/input.txt
+    input_path = Path(__file__).parent.parent.parent.parent / "data" / "input.txt"     
+    output_path = Path(__file__).parent.parent.parent.parent / "data" / "report.csv"   
 
     if not input_path.exists():
         print(f"Файл {input_path} не найден!")

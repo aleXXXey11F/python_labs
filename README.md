@@ -409,7 +409,9 @@
     
     print("\n Файл 'output/users.csv' успешно создан!")
 ![скриншот задания](images/lab04/1111.png)
+
 ![скриншот задания](images/lab04/2222.png)
+
 ![скриншот задания](images/lab04/3333.png)
 ## Задание B
     import sys

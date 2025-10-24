@@ -335,3 +335,163 @@
     echo "2024 year 2025 year 2024" | python src/lab03/text_stats.py
     echo "bb aa bb aa cc" | python src/lab03/text_stats.py
     echo "Hello, world!!! Test-test... 123" | python src/lab03/text_stats.py
+# Лабораторная работа 4
+## Задание A
+    from pathlib import Path
+    import csv
+    
+    
+    def read_text(path: str | Path, encoding: str = "utf-8") -> str:
+        '''
+        Открывает текстовый файл и возвращает его содержимое как одну строку.
+    
+        По умолчанию используется кодировка UTF-8.
+        При необходимости можно указать другую, например encoding="cp1251".
+        '''
+        path = Path(path)
+        with path.open('r', encoding=encoding) as file:
+            return file.read()  
+    
+    
+    def ensure_parent_dir(path: str | Path) -> None:
+        '''
+        Создаёт родительские директории для указанного пути, если их нет.
+    
+        Полезно перед записью файла, чтобы избежать ошибки FileNotFoundError.
+        '''
+        path = Path(path)
+        parent = path.parent
+        if not parent.exists():
+            parent.mkdir(parents=True, exist_ok=True)
+    
+    
+    def write_csv(rows: list[tuple | list], path: str | Path, header: tuple[str, ...] | None = None) -> None:
+        '''
+        Создаёт или перезаписывает CSV-файл с разделителем ','.
+    
+        Если указан header, записывает его первой строкой.
+        Проверяет, что все строки в 'rows' имеют одинаковую длину.
+        '''
+        if not rows:
+            raise ValueError("Список строк 'rows' не может быть пустым.")
+    
+        row_lengths = {len(r) for r in rows}
+        if len(row_lengths) > 1:
+            raise ValueError("Все строки в 'rows' должны быть одинаковой длины.")
+    
+        ensure_parent_dir(path)
+    
+        path = Path(path)
+        with path.open("w", newline="", encoding="utf-8") as file:
+            writer = csv.writer(file, delimiter=",")
+            if header:
+                writer.writerow(header)
+            writer.writerows(rows)
+    
+    
+    input_path = Path("data/input.txt")
+    
+    try:
+        content = read_text(input_path, encoding="utf-8")
+        print("Содержимое файла input.txt:\n", content)
+    except FileNotFoundError:
+        print("Файл не найден!")
+    except UnicodeDecodeError:
+        print("Ошибка кодировки! Попробуйте encoding='cp1251'.")
+    
+    
+    rows = [
+        (1, 'Петя', 17),
+        (2, 'Ваня', 18),
+        (3, 'Егор', 17)
+    ]
+    write_csv(rows, "output/users.csv", header=("ID", "Name", "Age"))
+    
+    print("\n Файл 'output/users.csv' успешно создан!")
+![скриншот задания](images/lab04/1111.png)
+![скриншот задания](images/lab04/2222.png)
+![скриншот задания](images/lab04/3333.png)
+## Задание B
+    import sys
+    import os
+    from pathlib import Path
+    
+    # Добавляем путь к папке lib
+    project_root = Path(__file__).parent.parent.parent.parent
+    lib_path = project_root / "lib"
+    sys.path.insert(0, str(lib_path))
+    
+    try:
+        from lib.text import tokenize, count_freg, top_n, normalize
+    except ImportError as e:
+        print(f"Ошибка импорта: {e}")
+        print("Убедитесь, что файл lib/text.py существует")
+        sys.exit(1)
+    
+    import csv
+    
+    table = True
+    
+    def print_table(top: list[tuple]):
+        if not top:
+            print('Нет слов для отображения')
+            return
+        max_len = max(len(word) for word, _ in top)
+        col_word = 'слово'
+        col_freq = 'частота'
+    
+        width_word = max(max_len, len(col_word))
+        width_freq = len(col_freq)
+        print(f"{col_word:<{width_word}} | {col_freq}")
+        print("-" * width_word + "-+-" + "-" * width_freq)
+    
+        for word, count in top:
+            print(f"{word:<{width_word}} | {count}")
+    
+    
+    def main():
+        # Ищем файл в корневой папке data/input.txt
+        input_path = Path(__file__).parent.parent.parent.parent / "data" / "input.txt"     
+        output_path = Path(__file__).parent.parent.parent.parent / "data" / "report.csv"   
+    
+        if not input_path.exists():
+            print(f"Файл {input_path} не найден!")
+            sys.exit(1)
+    
+        try:
+            text = input_path.read_text(encoding="utf-8")
+        except UnicodeDecodeError as e:
+            print(f"Ошибка кодировки при чтении {input_path}: {e}")
+            sys.exit(1) 
+    
+        text = normalize(text)
+        tokens = tokenize(text)
+        freq = count_freg(tokens)
+    
+        def sort_key(item):
+            word, count = item
+            return (-count, word)
+    
+        sorted_items = sorted(freq.items(), key=sort_key)
+         
+         
+        output_path.parent.mkdir(parents=True, exist_ok=True)  
+        with output_path.open("w", newline="", encoding="utf-8") as file: 
+            writer = csv.writer(file) 
+            writer.writerow(["word", "count"]) 
+            writer.writerows(sorted_items)
+        
+        total_words = sum(freq.values())
+        unique_words = len(freq)
+        top5 = top_n(freq, n=5)
+    
+        print(f"Всего слов: {total_words}")
+        print(f"Уникальных слов: {unique_words}")
+        print(f"Топ: {top5}")
+    
+        if table:
+            print("\nТаблица топ слов:")
+            print_table(top5)
+    
+    if __name__ == "__main__":
+        main()

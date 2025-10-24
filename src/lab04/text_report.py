@@ -1,9 +1,19 @@
 import sys
 import os
-sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
-from src.text import tokenize, count_freg, top_n, normalize
-import csv
 from pathlib import Path
+
+# Добавляем путь к корню проекта
+project_root = Path(__file__).parent.parent.parent.parent
+sys.path.insert(0, str(project_root))
+
+try:
+    from src.text import tokenize, count_freg, top_n, normalize
+except ImportError as e:
+    print(f"Ошибка импорта: {e}")
+    print("Убедитесь, что файл src/text.py существует")
+    sys.exit(1)
+
+import csv
 
 table = True
 
@@ -67,5 +77,5 @@ def main():
         print("\nТаблица топ слов:")
         print_table(top5)
 
-if name == "__main__":
+if __name__ == "__main__":
     main()

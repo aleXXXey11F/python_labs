@@ -18,25 +18,25 @@ def main():
         # 1. JSON → CSV
         print("\n1. Конвертация JSON → CSV:")
         json_to_csv("data/samples/people.json", "data/out/people_from_json.csv")
-        print("✓ Успешно: data/out/people_from_json.csv")
+        print(" Успешно: data/out/people_from_json.csv")
         
         # 2. CSV → JSON
         print("\n2. Конвертация CSV → JSON:")
         csv_to_json("data/samples/people.csv", "data/out/people_from_csv.json")
-        print("✓ Успешно: data/out/people_from_csv.json")
+        print(" Успешно: data/out/people_from_csv.json")
         
         # 3. CSV → XLSX
         print("\n3. Конвертация CSV → XLSX:")
         csv_to_xlsx("data/samples/cities.csv", "data/out/cities.xlsx")
-        print("✓ Успешно: data/out/cities.xlsx")
+        print(" Успешно: data/out/cities.xlsx")
         
         # 4. Обратная проверка: JSON → CSV → JSON
         print("\n4. Обратная проверка JSON → CSV → JSON:")
         json_to_csv("data/out/people_from_csv.json", "data/out/people_roundtrip.csv")
         csv_to_json("data/out/people_roundtrip.csv", "data/out/people_roundtrip.json")
-        print("✓ Успешно: data/out/people_roundtrip.json")
+        print(" Успешно: data/out/people_roundtrip.json")
         
-        print("\n✅ Все операции выполнены успешно!")
+        print("\n Все операции выполнены успешно!")
         
     except Exception as e:
         print(f"❌ Ошибка: {e}")

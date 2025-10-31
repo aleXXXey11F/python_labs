@@ -581,4 +581,121 @@ def csv_to_json(csv_path: str, json_path: str) -> None:
     
     with json_file.open('w', encoding='utf-8') as f:
         json.dump(rows, f, ensure_ascii=False, indent=2)
-'''
+```
+## Задание B
+```python
+import csv
+from pathlib import Path
+try:
+    from openpyxl import Workbook
+except ImportError:
+    raise ImportError("Для работы модуля требуется установить openpyxl: pip install openpyxl")
+
+
+def csv_to_xlsx(csv_path: str, xlsx_path: str) -> None:
+    """
+    Конвертирует CSV в XLSX.
+    Использовать openpyxl.
+    Первая строка CSV — заголовок.
+    Лист называется "Sheet1".
+    Колонки — автоширина по длине текста (не менее 8 символов).
+    """
+    csv_file = Path(csv_path)
+    if not csv_file.exists():
+        raise FileNotFoundError(f"CSV файл не найден: {csv_path}")
+    
+    if not csv_file.suffix.lower() == '.csv':
+        raise ValueError(f"Неверный тип файла: ожидается .csv, получен {csv_file.suffix}")
+    
+    try:
+        with csv_file.open('r', encoding='utf-8') as f:
+            reader = csv.reader(f)
+            rows = list(reader)
+    except Exception as e:
+        raise ValueError(f"Ошибка чтения CSV: {e}")
+    
+    if not rows:
+        raise ValueError("Пустой CSV файл")
+    
+    # Создаем новую книгу Excel
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Sheet1"
+    
+    # Записываем данные
+    for row in rows:
+        ws.append(row)
+    
+    # Настраиваем автоширину колонок (не менее 8 символов)
+    for column in ws.columns:
+        max_length = 0
+        column_letter = column[0].column_letter
+        for cell in column:
+            try:
+                if len(str(cell.value)) > max_length:
+                    max_length = len(str(cell.value))
+            except:
+                pass
+        adjusted_width = max(max_length + 2, 8)  # Минимум 8 символов
+        ws.column_dimensions[column_letter].width = adjusted_width
+    
+    # Сохраняем файл
+    xlsx_file = Path(xlsx_path)
+    xlsx_file.parent.mkdir(parents=True, exist_ok=True)
+    wb.save(xlsx_file)
+```
+## Demo файл
+```python
+import sys
+from pathlib import Path
+
+# Добавляем путь к модулям
+sys.path.append(str(Path(__file__).parent / 'src'))
+
+from lab05.json_csv import json_to_csv, csv_to_json
+from lab05.csv_xlsx import csv_to_xlsx
+
+def main():
+    print("Демонстрация работы модулей lab05")
+    
+    # Создаем директории для выходных файлов
+    output_dir = Path("data/out")
+    output_dir.mkdir(parents=True, exist_ok=True)
+    
+    try:
+        # 1. JSON → CSV
+        print("\n1. Конвертация JSON → CSV:")
+        json_to_csv("data/samples/people.json", "data/out/people_from_json.csv")
+        print(" Успешно: data/out/people_from_json.csv")
+        
+        # 2. CSV → JSON
+        print("\n2. Конвертация CSV → JSON:")
+        csv_to_json("data/samples/people.csv", "data/out/people_from_csv.json")
+        print(" Успешно: data/out/people_from_csv.json")
+        
+        # 3. CSV → XLSX
+        print("\n3. Конвертация CSV → XLSX:")
+        csv_to_xlsx("data/samples/cities.csv", "data/out/cities.xlsx")
+        print(" Успешно: data/out/cities.xlsx")
+        
+        # 4. Обратная проверка: JSON → CSV → JSON
+        print("\n4. Обратная проверка JSON → CSV → JSON:")
+        json_to_csv("data/out/people_from_csv.json", "data/out/people_roundtrip.csv")
+        csv_to_json("data/out/people_roundtrip.csv", "data/out/people_roundtrip.json")
+        print(" Успешно: data/out/people_roundtrip.json")
+        
+        print("\n Все операции выполнены успешно!")
+        
+    except Exception as e:
+        print(f" Ошибка: {e}")
+
+if __name__ == "__main__":
+    main()
+```
+![скриншот задания](images/lab05/1.png)
+
+![скриншот задания](images/lab05/2.png)
+
+![скриншот задания](images/lab05/3.png)
+
+![скриншот задания](images/lab05/4.png)

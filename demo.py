@@ -39,7 +39,7 @@ def main():
         print("\n Все операции выполнены успешно!")
         
     except Exception as e:
-        print(f"❌ Ошибка: {e}")
+        print(f" Ошибка: {e}")
 
 if __name__ == "__main__":
     main()

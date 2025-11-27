@@ -5,13 +5,37 @@ CLI-утилиты для работы с текстом
 
 import argparse
 import sys
-import os
+import re
+from collections import Counter
 
-# Добавляем путь к корню проекта для импорта модулей
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../../..'))
+def read_file(file_path):
+    """
+    Чтение файла с автоматическим определением кодировки
+    """
+    encodings = ['utf-8', 'cp1251', 'iso-8859-1', 'windows-1251']
+    
+    for encoding in encodings:
+        try:
+            with open(file_path, 'r', encoding=encoding) as file:
+                return file.read()
+        except UnicodeDecodeError:
+            continue
+            
+    raise UnicodeDecodeError(f"Не удалось декодировать файл {file_path}")
 
-from src.lib.io_helpers import read_file, write_file
-from src.lab03.text_analysis import calculate_word_frequency, get_top_words
+def calculate_word_frequency(text):
+    """
+    Анализ частотности слов в тексте
+    """
+    # Приводим к нижнему регистру и находим слова
+    words = re.findall(r'\b[а-яёa-z]+\b', text.lower())
+    return Counter(words)
+
+def get_top_words(frequency, top_n=5):
+    """
+    Получение топ-N самых частых слов
+    """
+    return frequency.most_common(top_n)
 
 def cat_command(input_file, number_lines=False):
     """

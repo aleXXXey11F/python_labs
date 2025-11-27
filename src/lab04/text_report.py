@@ -18,13 +18,14 @@ import csv
 
 table = True
 
+
 def print_table(top: list[tuple]):
     if not top:
-        print('Нет слов для отображения')
+        print("Нет слов для отображения")
         return
     max_len = max(len(word) for word, _ in top)
-    col_word = 'слово'
-    col_freq = 'частота'
+    col_word = "слово"
+    col_freq = "частота"
 
     width_word = max(max_len, len(col_word))
     width_freq = len(col_freq)
@@ -37,8 +38,8 @@ def print_table(top: list[tuple]):
 
 def main():
     # Ищем файл в корневой папке data/input.txt
-    input_path = Path(__file__).parent.parent.parent.parent / "data" / "input.txt"     
-    output_path = Path(__file__).parent.parent.parent.parent / "data" / "report.csv"   
+    input_path = Path(__file__).parent.parent.parent.parent / "data" / "input.txt"
+    output_path = Path(__file__).parent.parent.parent.parent / "data" / "report.csv"
 
     if not input_path.exists():
         print(f"Файл {input_path} не найден!")
@@ -48,7 +49,7 @@ def main():
         text = input_path.read_text(encoding="utf-8")
     except UnicodeDecodeError as e:
         print(f"Ошибка кодировки при чтении {input_path}: {e}")
-        sys.exit(1) 
+        sys.exit(1)
 
     text = normalize(text)
     tokens = tokenize(text)
@@ -59,14 +60,13 @@ def main():
         return (-count, word)
 
     sorted_items = sorted(freq.items(), key=sort_key)
-     
-     
-    output_path.parent.mkdir(parents=True, exist_ok=True)  
-    with output_path.open("w", newline="", encoding="utf-8") as file: 
-        writer = csv.writer(file) 
-        writer.writerow(["word", "count"]) 
+
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    with output_path.open("w", newline="", encoding="utf-8") as file:
+        writer = csv.writer(file)
+        writer.writerow(["word", "count"])
         writer.writerows(sorted_items)
-    
+
     total_words = sum(freq.values())
     unique_words = len(freq)
     top5 = top_n(freq, n=5)
@@ -78,6 +78,7 @@ def main():
     if table:
         print("\nТаблица топ слов:")
         print_table(top5)
+
 
 if __name__ == "__main__":
     main()

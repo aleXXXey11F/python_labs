@@ -1,31 +1,38 @@
-nums=[1.0, 1, 2.5, 2.5, 0]
+nums = [1.0, 1, 2.5, 2.5, 0]
+
+
 def min_max(nums: list[float | int]) -> tuple[float | int, float | int]:
     if not nums:
         raise ValueError("Список не может быть пустым")
     else:
-        minmax=(min(nums),max(nums))
+        minmax = (min(nums), max(nums))
         return minmax
+
+
 def unique_sorted(nums: list[float | int]) -> list[float | int]:
-    dict_nums=dict.fromkeys(nums)
-    nums_un=list(dict_nums)
+    dict_nums = dict.fromkeys(nums)
+    nums_un = list(dict_nums)
     nums_un.sort()
     return nums_un
+
+
 def flatten(mat: list[list | tuple]) -> list:
     result = []
     for row in mat:
         if not isinstance(row, (list, tuple)):
             raise TypeError("Ожидался список или кортеж")
         result.extend(row)
-    return result 
+    return result
 
-try:      
+
+try:
     print(min_max(nums))
 except ValueError as e:
-    print(f"Ошибка: {e}") #min_max output
+    print(f"Ошибка: {e}")  # min_max output
 
-print(unique_sorted(nums)) #unique_sorted output
+print(unique_sorted(nums))  # unique_sorted output
 
 try:
     print(flatten(nums))
 except TypeError as a:
-    print(f"Ошибка: {a}") #flatten output
+    print(f"Ошибка: {a}")  # flatten output

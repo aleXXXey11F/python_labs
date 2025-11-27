@@ -4,8 +4,8 @@ import csv
 
 def read_text(path: str | Path, encoding: str = "utf-8") -> str:
     path = Path(path)
-    with path.open('r', encoding=encoding) as file:
-        return file.read()  
+    with path.open("r", encoding=encoding) as file:
+        return file.read()
 
 
 def ensure_parent_dir(path: str | Path) -> None:
@@ -15,7 +15,9 @@ def ensure_parent_dir(path: str | Path) -> None:
         parent.mkdir(parents=True, exist_ok=True)
 
 
-def write_csv(rows: list[tuple | list], path: str | Path, header: tuple[str, ...] | None = None) -> None:
+def write_csv(
+    rows: list[tuple | list], path: str | Path, header: tuple[str, ...] | None = None
+) -> None:
     if not rows:
         raise ValueError("Список строк 'rows' не может быть пустым.")
 
@@ -44,11 +46,7 @@ except UnicodeDecodeError:
     print("Ошибка кодировки! Попробуйте encoding='cp1251'.")
 
 
-rows = [
-    (1, 'Петя', 17),
-    (2, 'Ваня', 18),
-    (3, 'Егор', 17)
-]
+rows = [(1, "Петя", 17), (2, "Ваня", 18), (3, "Егор", 17)]
 write_csv(rows, "output/users.csv", header=("ID", "Name", "Age"))
 
 print("\n Файл 'output/users.csv' успешно создан!")

@@ -6,7 +6,15 @@ import csv
 from pathlib import Path
 from typing import List, Optional, Dict, Any
 import statistics
-from ..lab08.models import Student
+
+# Абсолютный импорт
+import sys
+import os
+
+# Добавляем путь к src в sys.path
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+
+from lab08.models import Student
 
 
 class Group:
@@ -23,6 +31,7 @@ class Group:
         """
         self.path = Path(storage_path)
         self._ensure_storage_exists()
+    
     
     def _ensure_storage_exists(self) -> None:
         """

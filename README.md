@@ -1211,6 +1211,21 @@ addopts = [
 source = ["src"]
 omit = ["*/tests/*", "*/test_*"]
 ```
+        # Проверка что pytest установлен
+        pytest --version
+        
+        # Запуск всех тестов
+        pytest
+        
+        # Запуск конкретного тестового файла
+        pytest tests/test_text.py -v
+        
+        # С покрытием кода
+        pytest --cov=src --cov-report=term-missing
+        
+        # Проверка стиля кода
+        black --check src tests
+
 ![скриншот задания](images/lab07/1.png)
 
 ![скриншот задания](images/lab07/2.png)

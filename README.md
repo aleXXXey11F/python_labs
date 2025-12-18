@@ -2149,4 +2149,505 @@ if __name__ == "__main__":
         sys.exit(1)
 ```
 ![скриншот задания](images/lab09/1.png)
+
 ![скриншот задания](images/lab09/2.png)
+
+# Лабораторная работа 10
+## structures.py
+```python
+from collections import deque
+from typing import Any
+
+
+class Stack:
+    """Реализация стека (LIFO) на базе списка."""
+    
+    def __init__(self) -> None:
+        """Инициализация пустого стека."""
+        self._data: list[Any] = []
+    
+    def push(self, item: Any) -> None:
+        """Добавить элемент на вершину стека. Сложность: O(1)."""
+        self._data.append(item)
+    
+    def pop(self) -> Any:
+        """
+        Удалить и вернуть верхний элемент стека.
+        Сложность: O(1).
+        
+        Raises:
+            IndexError: если стек пуст
+        """
+        if self.is_empty():
+            raise IndexError("Попытка извлечения из пустого стека")
+        return self._data.pop()
+    
+    def peek(self) -> Any | None:
+        """
+        Вернуть верхний элемент без удаления.
+        Сложность: O(1).
+        
+        Returns:
+            Верхний элемент или None, если стек пуст
+        """
+        if self.is_empty():
+            return None
+        return self._data[-1]
+    
+    def is_empty(self) -> bool:
+        """Проверить, пуст ли стек. Сложность: O(1)."""
+        return len(self._data) == 0
+    
+    def __len__(self) -> int:
+        """Вернуть количество элементов в стеке. Сложность: O(1)."""
+        return len(self._data)
+    
+    def __repr__(self) -> str:
+        """Строковое представление стека."""
+        return f"Stack({self._data})"
+
+
+class Queue:
+    """Реализация очереди (FIFO) на базе deque."""
+    
+    def __init__(self) -> None:
+        """Инициализация пустой очереди."""
+        self._data: deque[Any] = deque()
+    
+    def enqueue(self, item: Any) -> None:
+        """Добавить элемент в конец очереди. Сложность: O(1)."""
+        self._data.append(item)
+    
+    def dequeue(self) -> Any:
+        """
+        Удалить и вернуть первый элемент очереди.
+        Сложность: O(1).
+        
+        Raises:
+            IndexError: если очередь пуста
+        """
+        if self.is_empty():
+            raise IndexError("Попытка извлечения из пустой очереди")
+        return self._data.popleft()
+    
+    def peek(self) -> Any | None:
+        """
+        Вернуть первый элемент без удаления.
+        Сложность: O(1).
+        
+        Returns:
+            Первый элемент или None, если очередь пуста
+        """
+        if self.is_empty():
+            return None
+        return self._data[0]
+    
+    def is_empty(self) -> bool:
+        """Проверить, пуста ли очередь. Сложность: O(1)."""
+        return len(self._data) == 0
+    
+    def __len__(self) -> int:
+        """Вернуть количество элементов в очереди. Сложность: O(1)."""
+        return len(self._data)
+    
+    def __repr__(self) -> str:
+        """Строковое представление очереди."""
+        return f"Queue({list(self._data)})"
+```
+## linked_list.py
+```python
+from typing import Any, Iterator, Optional
+
+
+class Node:
+    """Узел односвязного списка."""
+    
+    def __init__(self, value: Any, next_node: Optional['Node'] = None) -> None:
+        """
+        Инициализация узла.
+        
+        Args:
+            value: Значение узла
+            next_node: Ссылка на следующий узел
+        """
+        self.value: Any = value
+        self.next: Optional[Node] = next_node
+    
+    def __repr__(self) -> str:
+        """Строковое представление узла."""
+        return f"[{self.value}]"
+
+
+class SinglyLinkedList:
+    """Односвязный список."""
+    
+    def __init__(self) -> None:
+        """Инициализация пустого списка."""
+        self.head: Optional[Node] = None
+        self.tail: Optional[Node] = None
+        self._size: int = 0
+    
+    def append(self, value: Any) -> None:
+        """
+        Добавить элемент в конец списка.
+        Сложность: O(1) с использованием tail.
+        """
+        new_node = Node(value)
+        
+        if self.is_empty():
+            # Если список пуст, новый узел становится и головой и хвостом
+            self.head = new_node
+            self.tail = new_node
+        else:
+            # Добавляем в конец и обновляем tail
+            self.tail.next = new_node
+            self.tail = new_node
+        
+        self._size += 1
+    
+    def prepend(self, value: Any) -> None:
+        """
+        Добавить элемент в начало списка.
+        Сложность: O(1).
+        """
+        new_node = Node(value, self.head)
+        
+        if self.is_empty():
+            # Если список пуст, новый узел становится и головой и хвостом
+            self.tail = new_node
+        
+        self.head = new_node
+        self._size += 1
+    
+    def insert(self, idx: int, value: Any) -> None:
+        """
+        Вставить элемент по индексу.
+        Сложность: O(n) в худшем случае.
+        
+        Args:
+            idx: Индекс для вставки
+            value: Значение для вставки
+            
+        Raises:
+            IndexError: если индекс вне диапазона [0, len(list)]
+        """
+        if idx < 0 or idx > self._size:
+            raise IndexError(f"Индекс {idx} вне диапазона [0, {self._size}]")
+        
+        if idx == 0:
+            # Вставка в начало
+            self.prepend(value)
+        elif idx == self._size:
+            # Вставка в конец
+            self.append(value)
+        else:
+            # Вставка в середину
+            current = self.head
+            for _ in range(idx - 1):
+                current = current.next
+            
+            new_node = Node(value, current.next)
+            current.next = new_node
+            self._size += 1
+    
+    def remove_at(self, idx: int) -> None:
+        """
+        Удалить элемент по индексу.
+        Сложность: O(n) в худшем случае.
+        
+        Args:
+            idx: Индекс элемента для удаления
+            
+        Raises:
+            IndexError: если индекс вне диапазона или список пуст
+        """
+        if self.is_empty():
+            raise IndexError("Попытка удаления из пустого списка")
+        
+        if idx < 0 or idx >= self._size:
+            raise IndexError(f"Индекс {idx} вне диапазона [0, {self._size - 1}]")
+        
+        if idx == 0:
+            # Удаление первого элемента
+            self.head = self.head.next
+            if self.head is None:
+                # Если список стал пустым, обновляем tail
+                self.tail = None
+        else:
+            # Удаление из середины или конца
+            current = self.head
+            for _ in range(idx - 1):
+                current = current.next
+            
+            # current теперь указывает на элемент перед удаляемым
+            current.next = current.next.next
+            
+            # Если удалили последний элемент, обновляем tail
+            if current.next is None:
+                self.tail = current
+        
+        self._size -= 1
+    
+    def remove(self, value: Any) -> bool:
+        """
+        Удалить первое вхождение значения.
+        Сложность: O(n).
+        
+        Args:
+            value: Значение для удаления
+            
+        Returns:
+            True если элемент был удален, иначе False
+        """
+        if self.is_empty():
+            return False
+        
+        # Специальный случай: удаление головы
+        if self.head.value == value:
+            self.head = self.head.next
+            if self.head is None:
+                self.tail = None
+            self._size -= 1
+            return True
+        
+        # Поиск элемента для удаления
+        current = self.head
+        while current.next is not None and current.next.value != value:
+            current = current.next
+        
+        # Если нашли элемент
+        if current.next is not None:
+            current.next = current.next.next
+            
+            # Если удалили последний элемент, обновляем tail
+            if current.next is None:
+                self.tail = current
+            
+            self._size -= 1
+            return True
+        
+        return False
+    
+    def is_empty(self) -> bool:
+        """Проверить, пуст ли список. Сложность: O(1)."""
+        return self.head is None
+    
+    def __iter__(self) -> Iterator[Any]:
+        """
+        Итератор по значениям списка.
+        Сложность итерации по всему списку: O(n).
+        """
+        current = self.head
+        while current is not None:
+            yield current.value
+            current = current.next
+    
+    def __len__(self) -> int:
+        """Вернуть количество элементов. Сложность: O(1)."""
+        return self._size
+    
+    def __repr__(self) -> str:
+        """Строковое представление списка в виде [A] -> [B] -> None."""
+        if self.is_empty():
+            return "SinglyLinkedList([])"
+        
+        result = []
+        current = self.head
+        while current is not None:
+            result.append(str(current))
+            current = current.next
+        
+        return " -> ".join(result) + " -> None"
+    
+    def to_list(self) -> list:
+        """Преобразовать список в обычный Python list. Сложность: O(n)."""
+        return list(self)
+```
+## example_usage.py
+```python
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+from src.lab10.structures import Stack, Queue
+from src.lab10.linked_list import SinglyLinkedList
+
+
+def demonstrate_stack():
+    """Демонстрация работы стека."""
+    print("=" * 50)
+    print("Демонстрация стека (Stack):")
+    print("=" * 50)
+    
+    stack = Stack()
+    print(f"Создан пустой стек: {stack}")
+    print(f"Стек пуст? {stack.is_empty()}")
+    
+    # Добавляем элементы
+    for i in range(1, 6):
+        stack.push(f"Элемент {i}")
+        print(f"push('Элемент {i}') -> {stack}")
+    
+    print(f"\nВерхний элемент (peek): {stack.peek()}")
+    print(f"Длина стека: {len(stack)}")
+    
+    # Извлекаем элементы
+    print("\nИзвлечение элементов:")
+    while not stack.is_empty():
+        print(f"pop() -> {stack.pop()}, стек: {stack}")
+    
+    print(f"\nСтек пуст? {stack.is_empty()}")
+
+
+def demonstrate_queue():
+    """Демонстрация работы очереди."""
+    print("\n" + "=" * 50)
+    print("Демонстрация очереди (Queue):")
+    print("=" * 50)
+    
+    queue = Queue()
+    print(f"Создана пустая очередь: {queue}")
+    print(f"Очередь пуста? {queue.is_empty()}")
+    
+    # Добавляем элементы
+    for i in range(1, 6):
+        queue.enqueue(f"Задача {i}")
+        print(f"enqueue('Задача {i}') -> {queue}")
+    
+    print(f"\nПервый элемент (peek): {queue.peek()}")
+    print(f"Длина очереди: {len(queue)}")
+    
+    # Извлекаем элементы
+    print("\nИзвлечение элементов:")
+    while not queue.is_empty():
+        print(f"dequeue() -> {queue.dequeue()}, очередь: {queue}")
+    
+    print(f"\nОчередь пуста? {queue.is_empty()}")
+
+
+def demonstrate_linked_list():
+    """Демонстрация работы односвязного списка."""
+    print("\n" + "=" * 50)
+    print("Демонстрация односвязного списка (SinglyLinkedList):")
+    print("=" * 50)
+    
+    lst = SinglyLinkedList()
+    print(f"Создан пустой список: {lst}")
+    print(f"Список пуст? {lst.is_empty()}")
+    
+    # Добавляем элементы в конец
+    print("\nДобавление в конец (append):")
+    for i in range(1, 4):
+        lst.append(i * 10)
+        print(f"append({i * 10}) -> {lst}")
+    
+    # Добавляем элементы в начало
+    print("\nДобавление в начало (prepend):")
+    lst.prepend(5)
+    print(f"prepend(5) -> {lst}")
+    lst.prepend(1)
+    print(f"prepend(1) -> {lst}")
+    
+    # Вставка по индексу
+    print("\nВставка по индексу (insert):")
+    lst.insert(2, 15)
+    print(f"insert(2, 15) -> {lst}")
+    lst.insert(0, 0)
+    print(f"insert(0, 0) -> {lst}")
+    lst.insert(len(lst), 40)
+    print(f"insert({len(lst)-1}, 40) -> {lst}")
+    
+    # Итерация по списку
+    print(f"\nИтерация по списку:")
+    print(f"Список как Python list: {lst.to_list()}")
+    
+    # Удаление по индексу
+    print("\nУдаление по индексу (remove_at):")
+    lst.remove_at(2)
+    print(f"remove_at(2) -> {lst}")
+    lst.remove_at(0)
+    print(f"remove_at(0) -> {lst}")
+    
+    # Удаление по значению
+    print("\nУдаление по значению (remove):")
+    print(f"remove(30): {lst.remove(30)} -> {lst}")
+    print(f"remove(99) (не существует): {lst.remove(99)} -> {lst}")
+    
+    print(f"\nИтоговый список: {lst}")
+    print(f"Длина списка: {len(lst)}")
+    print(f"Список как Python list: {lst.to_list()}")
+
+
+def benchmark_comparison():
+    """Сравнение производительности структур данных."""
+    print("\n" + "=" * 50)
+    print("Сравнение производительности:")
+    print("=" * 50)
+    
+    import time
+    import random
+    
+    test_size = 10000
+    
+    # Тестирование Stack
+    print(f"\nТестирование Stack ({test_size} операций):")
+    stack = Stack()
+    start = time.time()
+    
+    for i in range(test_size):
+        stack.push(i)
+    
+    for _ in range(test_size):
+        stack.pop()
+    
+    stack_time = time.time() - start
+    print(f"Время выполнения: {stack_time:.6f} секунд")
+    
+    # Тестирование Queue
+    print(f"\nТестирование Queue ({test_size} операций):")
+    queue = Queue()
+    start = time.time()
+    
+    for i in range(test_size):
+        queue.enqueue(i)
+    
+    for _ in range(test_size):
+        queue.dequeue()
+    
+    queue_time = time.time() - start
+    print(f"Время выполнения: {queue_time:.6f} секунд")
+    
+    # Тестирование SinglyLinkedList
+    print(f"\nТестирование SinglyLinkedList ({test_size} операций):")
+    lst = SinglyLinkedList()
+    start = time.time()
+    
+    for i in range(test_size):
+        lst.append(i)
+    
+    # Обратите внимание: удаление из начала связного списка медленное!
+    for _ in range(test_size):
+        lst.remove_at(0)
+    
+    linked_list_time = time.time() - start
+    print(f"Время выполнения: {linked_list_time:.6f} секунд")
+    
+    # Вывод сравнения
+    print(f"\n" + "=" * 50)
+    print("Результаты сравнения:")
+    print(f"Stack:    {stack_time:.6f} секунд")
+    print(f"Queue:    {queue_time:.6f} секунд")
+    print(f"LinkedList: {linked_list_time:.6f} секунд")
+    print(f"\nLinkedList медленнее Stack в {linked_list_time/stack_time:.1f} раз")
+    print(f"LinkedList медленнее Queue в {linked_list_time/queue_time:.1f} раз")
+
+
+if __name__ == "__main__":
+    demonstrate_stack()
+    demonstrate_queue()
+    demonstrate_linked_list()
+    benchmark_comparison()
+```
+![скриншот задания](images/lab10/1.png)
+
+![скриншот задания](images/lab10/2.png)
